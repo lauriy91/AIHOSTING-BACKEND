@@ -1,4 +1,4 @@
 //URL MongoDB
 module.exports = {
-    db: 'mongodb+srv://hugonavarrogk1:Goalkeeper2021@cluster0.fxv7l.mongodb.net/aiohosting?retryWrites=true&w=majority'
+    db: 'mongodb+srv://villadaandi:contacto123456@cluster0.vr5dy.mongodb.net/Cluster0?retryWrites=true&w=majority'
 }
