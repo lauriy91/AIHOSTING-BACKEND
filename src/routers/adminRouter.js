@@ -1,5 +1,5 @@
 const express = require('express');
-const adminC = require('../controllers/adminController')
+const AdminController = require('../controllers/adminController')
 
 class RouterAdmin{
     
@@ -10,10 +10,10 @@ class RouterAdmin{
 
     config(){
     
-        const objAdminC = new adminC();
-    
+        const objAdminC = new AdminController();
+        console.log("creado")
         this.router.post("/admin", objAdminC.crear);
-        this.router.get("/admin/:id", objAdminC.login.consultaPorId);
+        this.router.get("/admin/login", objAdminC.login);
     }
 
 }
