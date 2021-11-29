@@ -1,19 +1,21 @@
 const modeloAdmin = require('../models/admin');
-const bcrypt= require('bcryptjs')
-const jwt = require('jsonwebtoken')
+const bcrypt= require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const admin = require('../models/admin');
 
-class AdminC {
+class AdminController {
     constructor(){
+    }
 
-            //1ra Petición
-            AdminC.crear=async (req,res)=>{
-            const {nombre, correo, contrasena}= req.body
-            const NuevoAdmin = new AdminC({
+        async crear(req, res, next){
+            
+            let {nombre, correo, contrasena}= req.body
+            let NuevoAdmin = new admin({
                 nombre,
                 correo,
                 contrasena 
             })
-            const correoAdmin = await AdminC.findOne({correo:correo})
+            const correoAdmin = await admin.findOne({correo:correo})
             if(correoAdmin){
                 res.json({
                     mensaje: 'El correo ya existe'
@@ -26,30 +28,37 @@ class AdminC {
                 res.json({
                     mensaje:'Bienvenido',
                     id: NuevoAdmin._id,
+                    correo: NuevoAdmin.correo,
                     nombre:NuevoAdmin.nombre,
+                    contrasena: NuevoAdmin.contrasena,
                     token
                 })
             }
-        }
+        next()
+    }
 
         //2da Petición
-        AdminC.login = async(req,res)=>{
-            const {correo,contrasena}= req.body
-            const adminC = await AdminC.findOne({correo:correo})
-            if(!AdminC){
+        login(req, res) {
+
+            let {correo,contrasena}= req.body
+            let AdminController = admin.findOne({correo:correo})
+            
+            modeloAdmin.findOne({ correo: correo }, (error, data) => {
+            
+            if(!admin){
 
                 return res.json({
-                    mensaje: 'Correo incorrecto' 
+                    mensaje: 'Ops Algo falló' 
                 })
             }
-            const match = await bcrypt.compare(contrasena, Admin.contrasena)
+            const match = bcrypt.compare(contrasena, admin.contrasena)
 
             if(match){
-                const token = jwt.sign({_id: AdminC._id},'secreta')
+                const token = jwt.sign({_id: AdminController._id},'secreta')
                 res.json({
-                    mensaje: 'Has iniciado seción',
-                    id: AdminC.id,
-                    nombre: AdminC.nombre,
+                    mensaje: 'Bienvenido ',
+                    id: AdminController.id,
+                    nombre: AdminController.nombre,
                     token
                 })
             }
@@ -57,12 +66,14 @@ class AdminC {
             else{
                 res.json({
                     mensaje: 'Contraseña incorrecta'
-                })
+                });
             }
+            next()
+        });
         }
-    }
-}
+            
+}       
 
 
 
-module.exports = AdminC
+module.exports = AdminController
