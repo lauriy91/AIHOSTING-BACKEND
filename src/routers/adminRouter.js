@@ -11,9 +11,8 @@ class RouterAdmin{
     config(){
     
         const objAdminC = new AdminController();
-        console.log("creado")
         this.router.post("/admin", objAdminC.crear);
-        this.router.get("/admin/login", objAdminC.login);
+        this.router.post("/admin/login", objAdminC.login);
     }
 
 }

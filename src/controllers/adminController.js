@@ -37,7 +37,6 @@ class AdminController {
         next()
     }
 
-        //2da Petición
        async login(req, res) {
 
             let {correo,contrasena}= req.body
