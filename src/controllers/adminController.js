@@ -38,38 +38,32 @@ class AdminController {
     }
 
         //2da Petición
-        login(req, res) {
+       async login(req, res) {
 
             let {correo,contrasena}= req.body
-            let AdminController = admin.findOne({correo:correo})
-            
-            modeloAdmin.findOne({ correo: correo }, (error, data) => {
-            
+            let admin = await modeloAdmin.findOne({correo:correo})
             if(!admin){
-
-                return res.json({
+                return res.status(401).json({mensaje: 'Credenciales inválidas'});
+                /*return res.json({
                     mensaje: 'Ops Algo falló' 
-                })
+                })*/
             }
             const match = bcrypt.compare(contrasena, admin.contrasena)
-
             if(match){
-                const token = jwt.sign({_id: AdminController._id},'secreta')
+                const token = jwt.sign({_id: admin._id},'secreta')
                 res.json({
                     mensaje: 'Bienvenido ',
-                    id: AdminController.id,
-                    nombre: AdminController.nombre,
+                    id: admin.id,
+                    nombre: admin.nombre,
                     token
                 })
             }
 
-            else{
+            /*else{
                 res.json({
                     mensaje: 'Contraseña incorrecta'
                 });
-            }
-            next()
-        });
+            }*/
         }
             
 }       
